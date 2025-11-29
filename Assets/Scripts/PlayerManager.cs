@@ -109,5 +109,19 @@ public class PlayerManager : MonoBehaviour {
                 Debug.Log("camera not found");
             }
         }
+        if (collision.CompareTag("GateToTwo")) {
+            SceneManager.LoadScene("LevelTwo");
+            rb.position = new Vector2(0, 0);
+            sr.sprite = sprites[0];
+        }
+        //later will have pits lower the player's health and respawn them near the pit,
+        //instead of just reloading the level as this does
+        if (collision.CompareTag("Pit")) {
+            string sceneName;
+            sceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(sceneName);
+            rb.position = new Vector2(0, 0);
+            sr.sprite = sprites[0];
+        }
     }
 }

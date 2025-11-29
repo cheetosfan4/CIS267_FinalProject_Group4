@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - RoomPresence
+  - Enemy
+  - GateToTwo
+  - Pit
   layers:
   - Default
   - TransparentFX
@@ -50,6 +53,9 @@ TagManager:
     locked: 0
   - name: Objects
     uniqueID: 4234870513
+    locked: 0
+  - name: Enemies
+    uniqueID: 1310451013
     locked: 0
   - name: Player
     uniqueID: 4178255219
