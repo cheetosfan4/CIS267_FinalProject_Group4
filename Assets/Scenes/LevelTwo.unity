@@ -861,6 +861,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gate
       objectReference: {fileID: 0}
+    - target: {fileID: 3521016506946930401, guid: a019a6540845d074fab9ed9fac7f2050, type: 3}
+      propertyPath: m_TagString
+      value: GateToThree
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

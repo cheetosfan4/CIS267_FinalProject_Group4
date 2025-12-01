@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - GateToTwo
   - Pit
+  - Warp
+  - GateToThree
   layers:
   - Default
   - TransparentFX
