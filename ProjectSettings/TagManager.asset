@@ -10,6 +10,7 @@ TagManager:
   - Pit
   - Warp
   - GateToThree
+  - Item
   layers:
   - Default
   - TransparentFX

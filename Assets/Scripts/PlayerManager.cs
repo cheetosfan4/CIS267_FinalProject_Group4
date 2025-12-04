@@ -11,13 +11,11 @@ public class PlayerManager : MonoBehaviour {
     private float inputHorizontal;
     private float inputVertical;
     private Vector2 currentRoom;
-    private Vector2 entryPosition;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
         currentRoom = Vector2.zero;
-        entryPosition = Vector2.zero;
     }
 
     void Update() {
@@ -64,32 +62,10 @@ public class PlayerManager : MonoBehaviour {
             //each room has a "room_presence" object that has a trigger collider
             //when the player enters a new room, the location of the room is sent to the camera
             GameObject camera = GameObject.FindWithTag("MainCamera");
-            Vector3 roomCoordinates = new Vector3();
+            Vector3 roomCoordinates = Vector3.zero;
             roomCoordinates.x = collision.gameObject.transform.position.x;
             roomCoordinates.y = collision.gameObject.transform.position.y;
             currentRoom = roomCoordinates;
-
-            //sets an offset for the entry position,
-            //so it is not on the border of two rooms
-            entryPosition = rb.position;
-            if (rb.position.x > roomCoordinates.x) {
-                entryPosition.x -= 1;
-            }
-            else if (rb.position.x < roomCoordinates.x) {
-                entryPosition.x += 1;
-            }
-            else if (rb.position.y > roomCoordinates.y) {
-                entryPosition.y -= 1;
-            }
-            else if (rb.position.y < roomCoordinates.y) {
-                entryPosition.y += 1;
-            }
-            else {
-                entryPosition = roomCoordinates;
-            }
-
-            //camera defaults to -10 z
-            roomCoordinates.z = -10f;
 
             if (camera != null) {
                 camera.GetComponent<CameraManager>().moveToRoom(roomCoordinates);
@@ -112,18 +88,28 @@ public class PlayerManager : MonoBehaviour {
             GameObject camera = GameObject.FindWithTag("MainCamera");
             GameManager.instance.lowerPlayerHealth(1);
 
-            //sets player's position to where they entered the room at
-            rb.position = entryPosition;
+            //sets player's position to the pit's respawn point
+            if (collision.gameObject.transform.GetChild(0) != null) {
+                rb.position = collision.gameObject.transform.GetChild(0).position;
+            }
+            else {
+                rb.position = currentRoom;
+            }
             sr.sprite = sprites[0];
-
-            /*
-            Vector3 snapPosition = currentRoom;
-            snapPosition.z = -10f;
-            camera.GetComponent<CameraManager>().snapToRoom(snapPosition);*/
         }
         if (collision.CompareTag("Warp")) {
             rb.position = new Vector2(0, 0);
             sr.sprite = sprites[0];
+        }
+        if (collision.CompareTag("Item")) {
+            GameObject item = collision.gameObject;
+            GameManager.instance.receiveItem(item);
+            //doesn't delete the item so that the gameobject can still be stored in gamemanager's items list
+            //this is so the item's script can still be used
+            item.tag = "Untagged";
+            item.GetComponent<SpriteRenderer>().enabled = false;
+            item.GetComponent<BoxCollider2D>().enabled = false;
+            item.transform.SetParent(GameManager.instance.transform);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,6 +21,9 @@ public class GameManager : MonoBehaviour {
     public GameObject[] inventorySlots;
     public GameObject selector;
     private RectTransform selectorTransform;
+    private List<GameObject> items;
+    public GameObject equippedItemSlot;
+    private GameObject equippedItem;
 
     private bool gameLoaded;
     private bool gamePaused;
@@ -28,6 +32,7 @@ public class GameManager : MonoBehaviour {
     private GameObject currentPlayer;
     private int playerHealth;
     private bool dead;
+    private float invulnerabilityTimer;
 
     private void Awake() {
         if (instance != null && instance != this) {
@@ -42,10 +47,13 @@ public class GameManager : MonoBehaviour {
         exitButtonText = exitButton.GetComponentInChildren<TextMeshProUGUI>();
         selectorTransform = selector.GetComponent<RectTransform>();
 
+        items = new List<GameObject>();
+
         //for starting the game from a different scene in the editor
         if (SceneManager.GetActiveScene().name != "MainMenu") {
             defaultInitialize();
         }
+        //for starting the game from the main menu
         else {
             title.SetActive(true);
             menuButtons.SetActive(true);
@@ -72,28 +80,51 @@ public class GameManager : MonoBehaviour {
         gameLoaded = true;
         gamePaused = false;
         inInventory = false;
+        invulnerabilityTimer = 0;
+    }
+
+    //destroys all items the player has collected
+    //is only called when quitting to main menu, and starting a new game
+    private void clearItems() {
+        if (equippedItem != null) {
+            Destroy(equippedItem);
+            equippedItem = null;
+        }
+        for (int i = 0; i < items.Count; i++) {
+            Destroy(items[i]);
+        }
+        items.Clear();
     }
 
     private void Update() {
         loadNewLevel();
         pauseGame();
         manageInventory();
+
+        //this timer is so the player can't take any more damage for a brief period after getting hit
+        if (invulnerabilityTimer > 0) {
+            invulnerabilityTimer -= Time.deltaTime;
+        }
     }
 
     public void startGame() {
+        //starting the game from the main menu
         if (!gameLoaded || dead) {
             SceneManager.LoadScene("LevelOne");
             defaultInitialize();
+            clearItems();
         }
+        //resuming the game from pause screen
         else if (gamePaused) {
             menuButtons.SetActive(false);
             Time.timeScale = 1;
             gamePaused = false;
         }
-
+        //need to add a restart button for the pause menu
     }
 
     public void exitGame() {
+        //returns to main menu from pause screen
         if (gameLoaded) {
             SceneManager.LoadScene("MainMenu");
             menuButtons.SetActive(true);
@@ -103,6 +134,7 @@ public class GameManager : MonoBehaviour {
             inventory.SetActive(false);
             health.SetActive(false);
             gameLoaded = false;
+            clearItems();
         }
         else {
             Application.Quit();
@@ -158,6 +190,7 @@ public class GameManager : MonoBehaviour {
             if (!inInventory) {
                 inventory.SetActive(true);
                 Time.timeScale = 0;
+                loadItems();
                 currentSlot = 0;
                 selectorTransform.anchoredPosition = inventorySlots[currentSlot].GetComponent<RectTransform>().anchoredPosition;
                 inInventory = true;
@@ -170,14 +203,31 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    //idea for later:
-    //when the player comes into contact with an item, it gets the collision.gameobject
-    //each item will have an itemID in its script, which will be obtained from collision.gameobject.GetComponent<blabla>.getItemID();
-    //this itemID is then sent from the player script to this script, which gives that ID to the next available inventory slot
-    //(if same itemID already exists in table for stackable items it will just add to that stack)
-    //add an array of sprites (or images?) to this script, and set the image component of each slot to the correct sprite/image using the itemID
+    private void loadItems() {
+        //disables all inventory slot images before loading them, in case the player lost any items
+        for (int i = 0; i < inventorySlots.Length; i++) {
+            inventorySlots[i].GetComponent<Image>().enabled = false;
+        }
+        equippedItemSlot.GetComponent<Image>().enabled = false;
+
+        for (int i = 0; i < items.Count; i++) {
+            Image slotImage = inventorySlots[i].GetComponent<Image>();
+            slotImage.enabled = true;
+            slotImage.sprite = items[i].GetComponent<SpriteRenderer>().sprite;
+        }
+        if (equippedItem != null) {
+            Image slotImage = equippedItemSlot.GetComponent<Image>();
+            slotImage.enabled = true;
+            slotImage.sprite = equippedItem.GetComponent<SpriteRenderer>().sprite;
+        }
+    }
+
+    //!!!need to implement stacking items
+    //and possibly a failsafe for collecting more unique items than there are slots
     private void manageInventory() {
         if (inInventory) {
+            bool equip = false;
+            bool swap = false;
             //chooses desired slot
             //will later add the ability to move up and down
             if (Input.GetKeyDown(KeyCode.A)) {
@@ -195,22 +245,63 @@ public class GameManager : MonoBehaviour {
                 currentSlot = 0;
             }
 
+            if (Input.GetKeyDown(KeyCode.E)) {
+                //if the image component is enabled, that means there is an item in that slot
+                if (inventorySlots[currentSlot].GetComponent<Image>().enabled == true) {
+                    equip = true;
+                }
+                else if (inventorySlots[currentSlot].GetComponent<Image>().enabled == false && equippedItem != null) {
+                    swap = true;
+                }
+            }
+
             //sets selector position to the position of the desired slot
             selectorTransform.anchoredPosition = inventorySlots[currentSlot].GetComponent<RectTransform>().anchoredPosition;
+            
+            //equips selected item if player pressed E
+            if (equip && equippedItem == null) {
+                equippedItem = items[currentSlot];
+                items.Remove(equippedItem);
+                equippedItem.GetComponent<ItemIdentifier>().setEquipped(true);
+                loadItems();
+            }
+            else if (equip && equippedItem != null) {
+                GameObject oldItem = equippedItem;
+                items.Add(oldItem);
+                equippedItem = items[currentSlot];
+                items.Remove(equippedItem);
+                equippedItem.GetComponent<ItemIdentifier>().setEquipped(true);
+                oldItem.GetComponent<ItemIdentifier>().setEquipped(false);
+                loadItems();
+            }
+            else if (swap) {
+                items.Add(equippedItem);
+                equippedItem.GetComponent<ItemIdentifier>().setEquipped(false);
+                equippedItem = null;
+                loadItems();
+            }
         }
     }
 
     public void lowerPlayerHealth(int amount) {
-        playerHealth -= amount;
-        Debug.Log("player health lowered by " + amount + ", current health: " + playerHealth);
-        updatePips();
-        if (playerHealth <= 0) {
-            death();
+        if (invulnerabilityTimer <= 0) {
+            playerHealth -= amount;
+            Debug.Log("player health lowered by " + amount + ", current health: " + playerHealth);
+            updatePips();
+
+            if (playerHealth <= 0) {
+                death();
+            }
+            else {
+                invulnerabilityTimer = 0.25f;
+            }
         }
     }
 
     private void updatePips() {
+        //starts at end of pips array
         for (int i = pips.Length -1; i >= 0; i--) {
+            //maximum of i is 4, maximum for player health is 5
             if (playerHealth > i) {
                 pips[i].GetComponent<Image>().sprite = pipSprites[0];
             }
@@ -220,6 +311,10 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void receiveItem(GameObject item) {
+        items.Add(item);
+    }
+
     private void death() {
         dead = true;
         inventory.SetActive (false);
@@ -227,5 +322,18 @@ public class GameManager : MonoBehaviour {
         startButtonText.text = "Retry";
         exitButtonText.text = "Main Menu";
         Time.timeScale = 0;
+    }
+    public bool isDead() {
+        return dead;
+    }
+    public bool isGamePaused() {
+        return gamePaused;
+    }
+    public bool isInInventory() {
+        return inInventory;
+    }
+
+    public GameObject getCurrentPlayer() {
+        return currentPlayer;
     }
 }

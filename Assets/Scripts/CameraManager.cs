@@ -18,10 +18,12 @@ public class CameraManager : MonoBehaviour {
 
     public void moveToRoom(Vector3 coordinates) {
         roomTarget = coordinates;
+        roomTarget.z = -10f;
     }
 
     public void snapToRoom(Vector3 coordinates) {
         roomTarget = coordinates;
-        transform.position = coordinates;
+        roomTarget.z = -10f;
+        transform.position = roomTarget;
     }
 }
