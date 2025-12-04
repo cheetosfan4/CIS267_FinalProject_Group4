@@ -18,7 +18,7 @@ public class StarItemScript : MonoBehaviour {
     private void Update() {
         awaitUse();
 
-        if (triggered) {
+        if (triggered && playerSR != null) {
             //cycles through hues based on time
             //uses modulo 1 on the hue since hues only go from 0-1
             hue = (hue + Time.deltaTime) % 1f;
@@ -31,6 +31,14 @@ public class StarItemScript : MonoBehaviour {
                 playerSR.color = Color.white;
                 Debug.Log("untriggered star effect");
             }
+        }
+        //if the player becomes null from switching scenes while the effect is active
+        else if (triggered && playerSR == null) {
+            triggered = false;
+            player = GameManager.instance.getCurrentPlayer();
+            playerSR = player.GetComponentInChildren<SpriteRenderer>();
+            playerSR.color = Color.white;
+            Debug.Log("untriggered star effect");
         }
     }
 

@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour {
 
         //for starting the game from a different scene in the editor
         if (SceneManager.GetActiveScene().name != "MainMenu") {
-            defaultInitialize();
+            //defaultInitialize();
         }
         //for starting the game from the main menu
         else {
@@ -62,6 +62,20 @@ public class GameManager : MonoBehaviour {
             gameLoaded = false;
             gamePaused = false;
             inInventory = false;
+        }
+    }
+
+    //runs defaultInitialize() once each gameplay scene is loaded
+    //currentPlayer wasn't getting properly set since it was running before the scene was fully loaded
+    private void OnEnable() {
+        SceneManager.sceneLoaded += onSceneLoaded;
+    }
+    private void OnDisable() {
+        SceneManager.sceneLoaded -= onSceneLoaded;
+    }
+    private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
+        if (scene.name != "MainMenu") {
+            defaultInitialize();
         }
     }
 
@@ -111,7 +125,7 @@ public class GameManager : MonoBehaviour {
         //starting the game from the main menu
         if (!gameLoaded || dead) {
             SceneManager.LoadScene("LevelOne");
-            defaultInitialize();
+            //defaultInitialize();
             clearItems();
         }
         //resuming the game from pause screen
@@ -164,7 +178,7 @@ public class GameManager : MonoBehaviour {
             }
 
             if (sceneLoaded) {
-                defaultInitialize();
+                //defaultInitialize();
             }
         }
     }
