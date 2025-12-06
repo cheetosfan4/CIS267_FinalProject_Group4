@@ -5,17 +5,20 @@ public class PlayerManager : MonoBehaviour {
 
     public float moveSpeed;
     public Sprite[] sprites;
-
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private float inputHorizontal;
     private float inputVertical;
     private Vector2 currentRoom;
+    private bool canMove;
+    private int currentDirection;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
         currentRoom = Vector2.zero;
+        canMove = true;
+        currentDirection = 0;
     }
 
     void Update() {
@@ -26,25 +29,32 @@ public class PlayerManager : MonoBehaviour {
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
 
-        rb.linearVelocity = new Vector2(moveSpeed * inputHorizontal, moveSpeed * inputVertical);
-        flipPlayer();
+        if (canMove) {
+            rb.linearVelocity = new Vector2(moveSpeed * inputHorizontal, moveSpeed * inputVertical);
+            flipPlayer();
+        }
     }
 
     private void flipPlayer() {
         if (Time.timeScale != 0) {
             int direction = 99;
+            //right
             if (inputHorizontal > 0) {
                 direction = 3;
             }
+            //left
             else if (inputHorizontal < 0) {
                 direction = 2;
             }
             //separate if statement for vertical flipping,
             //so the front and back sprites take priority over the side sprites
             //may change how this works in the future
+
+            //back
             if (inputVertical > 0) {
                 direction = 1;
             }
+            //front
             else if (inputVertical < 0) {
                 direction = 0;
             }
@@ -53,6 +63,7 @@ public class PlayerManager : MonoBehaviour {
             //so the player doesnt flip when not moving
             if (direction != 99) {
                 sr.sprite = sprites[direction];
+                currentDirection = direction;
             }
         }
     }
@@ -78,13 +89,15 @@ public class PlayerManager : MonoBehaviour {
             SceneManager.LoadScene("LevelTwo");
             rb.position = new Vector2(0, 0);
             sr.sprite = sprites[0];
+            currentDirection = 0;
         }
         if (collision.CompareTag("GateToThree")) {
             SceneManager.LoadScene("LevelThree");
             rb.position = new Vector2(0, 0);
             sr.sprite = sprites[0];
+            currentDirection = 0;
         }
-        if (collision.CompareTag("Pit")) {
+        if (collision.CompareTag("Pit") && canMove) {
             GameObject camera = GameObject.FindWithTag("MainCamera");
             GameManager.instance.lowerPlayerHealth(1);
 
@@ -96,10 +109,12 @@ public class PlayerManager : MonoBehaviour {
                 rb.position = currentRoom;
             }
             sr.sprite = sprites[0];
+            currentDirection = 0;
         }
         if (collision.CompareTag("Warp")) {
             rb.position = new Vector2(0, 0);
             sr.sprite = sprites[0];
+            currentDirection = 0;
         }
         if (collision.CompareTag("Item")) {
             GameObject item = collision.gameObject;
@@ -111,5 +126,30 @@ public class PlayerManager : MonoBehaviour {
             item.GetComponent<BoxCollider2D>().enabled = false;
             item.transform.SetParent(GameManager.instance.transform);
         }
+    }
+
+    //this is so the player can't stand on top of pits after using the hammer
+    private void OnTriggerStay2D(Collider2D collision) {
+        if (collision.CompareTag("Pit") && canMove) {
+            GameObject camera = GameObject.FindWithTag("MainCamera");
+            GameManager.instance.lowerPlayerHealth(1);
+
+            //sets player's position to the pit's respawn point
+            if (collision.gameObject.transform.GetChild(0) != null) {
+                rb.position = collision.gameObject.transform.GetChild(0).position;
+            }
+            else {
+                rb.position = currentRoom;
+            }
+            sr.sprite = sprites[0];
+            currentDirection = 0;
+        }
+    }
+
+    public void setCanMove(bool b) {
+        canMove = b;
+    }
+    public int getDirectionFacing() {
+        return currentDirection;
     }
 }
