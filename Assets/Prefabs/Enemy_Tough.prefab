@@ -212,7 +212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
   target: {fileID: 0}
   moveSpeed: 2
-  health: 2
+  enemyHealth: 2
   cameraMoveRadius: 12.2
   obstacleMask:
     serializedVersion: 2

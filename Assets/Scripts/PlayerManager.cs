@@ -102,14 +102,16 @@ public class PlayerManager : MonoBehaviour {
             GameManager.instance.lowerPlayerHealth(1);
 
             //sets player's position to the pit's respawn point
-            if (collision.gameObject.transform.GetChild(0) != null) {
-                rb.position = collision.gameObject.transform.GetChild(0).position;
-            }
-            else {
-                rb.position = currentRoom;
-            }
-            sr.sprite = sprites[0];
-            currentDirection = 0;
+                if (collision.gameObject.transform.GetChild(0) != null)
+                {
+                    rb.position = collision.gameObject.transform.GetChild(0).position;
+                }
+                else
+                {
+                    rb.position = currentRoom;
+                }
+                sr.sprite = sprites[0];
+                currentDirection = 0;
         }
         if (collision.CompareTag("Warp")) {
             rb.position = new Vector2(0, 0);
@@ -144,6 +146,68 @@ public class PlayerManager : MonoBehaviour {
             sr.sprite = sprites[0];
             currentDirection = 0;
         }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            EnemyManager enemy = collision.gameObject.GetComponent<EnemyManager>();
+            if (canMove)
+            {
+                GameManager.instance.lowerPlayerHealth(1);
+                // Knockback on enemy collision
+                float playerKnockbackDistance = 1.0f;
+                float enemyKnockbackDistance = 1.0f;
+                float knockbackDuration = 0.12f;
+
+                // direction from enemy to player
+                Vector2 enemyPos = collision.gameObject.transform.position;
+                Vector2 playerPos = rb.position;
+                Vector2 dir = (playerPos - enemyPos);
+                if (dir.sqrMagnitude < 0.0001f)
+                {
+                    // fallback if positions almost identical
+                    dir = Vector2.up;
+                }
+                dir.Normalize();
+
+                // push player back immediately
+                rb.position = rb.position + dir * playerKnockbackDistance;
+
+                // tell enemy to move the opposite direction (smoothly)
+                if (enemy != null)
+                {
+                    enemy.ApplyKnockback(-dir, enemyKnockbackDistance, knockbackDuration);
+                }
+            }
+            else
+            {
+                enemy.lowerEnemyHealth(1);
+                if(enemy.enemyHealth > 0)
+                {
+                    float enemyKnockbackDistance = 2.5f;
+                    float knockbackDuration = 0.12f;
+
+                    // direction from enemy to player
+                    Vector2 enemyPos = collision.gameObject.transform.position;
+                    Vector2 playerPos = rb.position;
+                    Vector2 dir = (playerPos - enemyPos);
+                    if (dir.sqrMagnitude < 0.0001f)
+                    {
+                        // fallback if positions almost identical
+                        dir = Vector2.up;
+                    }
+                    dir.Normalize();
+
+                    // tell enemy to move the opposite direction (smoothly)
+                    if (enemy != null)
+                    {
+                        enemy.ApplyKnockback(-dir, enemyKnockbackDistance, knockbackDuration);
+                    }
+                }
+            }
+        }
+
     }
 
     public void setCanMove(bool b) {

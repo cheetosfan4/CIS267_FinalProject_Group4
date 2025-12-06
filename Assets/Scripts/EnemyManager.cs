@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -6,10 +7,9 @@ public class EnemyManager : MonoBehaviour
     private Transform cameraTransform;
     public Transform target;
     public float moveSpeed;
-    public float health;
+    public float enemyHealth;
     public float cameraMoveRadius = 10;
 
-    [Header("Obstacle Avoidance")]
     public LayerMask obstacleMask;               // layers considered as blocking obstacles
     public float maxDetourDistance = 4;          // how far to sample detour points from enemy
     public float avoidSampleAngleStep = 20;      // degrees between detour samples
@@ -19,12 +19,20 @@ public class EnemyManager : MonoBehaviour
     private bool hasDetour;
     private Vector2 detourTarget;
 
+    private Coroutine knockbackCoroutine;
+
+    private Collider2D cachedCollider;
+    private const float knockbackBackoff = 0.02f; // small distance to keep from wall
+
     void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player")?.transform;
+        target = GameObject.FindGameObjectWithTag("Player").transform;
         cameraTransform = Camera.main.transform ?? GameObject.FindWithTag("MainCamera")?.transform;
         isDead = false;
         hasDetour = false;
+
+        // cache collider for safe spacing
+        cachedCollider = GetComponent<Collider2D>();
     }
 
     void Update()
@@ -145,5 +153,65 @@ public class EnemyManager : MonoBehaviour
                 Gizmos.DrawLine(transform.position, target.position);
             }
         }
+    }
+    
+    //knockback stuff
+    public void ApplyKnockback(Vector2 direction, float distance, float duration)
+    {
+        if (knockbackCoroutine != null)
+        {
+            StopCoroutine(knockbackCoroutine);
+            knockbackCoroutine = null;
+        }
+        knockbackCoroutine = StartCoroutine(KnockbackCoroutine(direction.normalized, distance, duration));
+    }
+
+    private IEnumerator KnockbackCoroutine(Vector2 direction, float distance, float duration)
+    {
+        Vector2 start = transform.position;
+
+        // Raycast ahead along the knockback path to see if an obstacle is between start and desired target.
+        RaycastHit2D hit = Physics2D.Raycast(start, direction, distance, obstacleMask);
+
+        Vector2 targetPos;
+        if (hit.collider != null)
+        {
+            // stop just before the obstacle
+            float backoff = knockbackBackoff;
+            // If we have a collider, use its smallest extent to increase safety slightly
+            if (cachedCollider != null)
+            {
+                float minExtent = Mathf.Min(cachedCollider.bounds.extents.x, cachedCollider.bounds.extents.y);
+                backoff = Mathf.Max(backoff, minExtent * 0.1f);
+            }
+
+            targetPos = hit.point - direction * backoff;
+        }
+        else
+        {
+            targetPos = start + direction * distance;
+        }
+
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float frac = Mathf.Clamp01(t / duration);
+            transform.position = Vector2.Lerp(start, targetPos, frac);
+            yield return null;
+        }
+        transform.position = targetPos;
+        knockbackCoroutine = null;
+    }
+
+    public void lowerEnemyHealth(int amount)
+    {
+            enemyHealth -= amount;
+
+            if (enemyHealth <= 0)
+            {
+            isDead = true;
+               gameObject.SetActive(false);
+            }
     }
 }
