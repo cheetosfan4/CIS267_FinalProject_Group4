@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 5030802692129916289}
   - component: {fileID: 1195102162278834943}
   - component: {fileID: 7057568490841789204}
+  - component: {fileID: 6326583787418344243}
   m_Layer: 0
   m_Name: Enemy_Tough
   m_TagString: Enemy
@@ -197,3 +198,25 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6326583787418344243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8484881893750430852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 486792ca73e92ae439a9dd6b7863d34b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
+  target: {fileID: 0}
+  moveSpeed: 2
+  health: 2
+  cameraMoveRadius: 12.2
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 8
+  maxDetourDistance: 4
+  avoidSampleAngleStep: 20
+  arrivalThreshold: 0.1

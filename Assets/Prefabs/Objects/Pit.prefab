@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1147484358134802984}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RespawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 6397068955574140055}
   - component: {fileID: 6575560352210132682}
   - component: {fileID: 6893771778245042126}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pit
   m_TagString: Pit
   m_Icon: {fileID: 0}

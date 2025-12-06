@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9083779248004591762}
   - component: {fileID: 7725111215277629292}
   - component: {fileID: 8350816157210023298}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CrackedBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}

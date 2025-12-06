@@ -480,6 +480,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2154313800903378206, guid: 4407f35f7487e614daf2cb85d947a561, type: 3}
+      propertyPath: maxDetourDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154313800903378206, guid: 4407f35f7487e614daf2cb85d947a561, type: 3}
+      propertyPath: avoidSampleAngleStep
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 4827889389960138441, guid: 4407f35f7487e614daf2cb85d947a561, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
@@ -785,6 +793,14 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_SpriteTilingProperty.drawMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Name
       value: Block_Thin
@@ -860,6 +876,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2619026222008169048, guid: bd45513c8cf6d24468d1b0cabacc49aa, type: 3}
       propertyPath: m_Size.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619026222008169048, guid: bd45513c8cf6d24468d1b0cabacc49aa, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8402592414569841192, guid: bd45513c8cf6d24468d1b0cabacc49aa, type: 3}
@@ -1395,6 +1415,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2154313800903378206, guid: 4407f35f7487e614daf2cb85d947a561, type: 3}
+      propertyPath: cameraMoveRadius
+      value: 12.2
+      objectReference: {fileID: 0}
     - target: {fileID: 4827889389960138441, guid: 4407f35f7487e614daf2cb85d947a561, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5
@@ -1525,7 +1549,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.y
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Name
@@ -2509,6 +2533,14 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_SpriteTilingProperty.drawMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Name
       value: Block_Thin (3)
@@ -3031,9 +3063,21 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_SpriteTilingProperty.drawMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Name
       value: Block_Thin
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5473499178249553342, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Size.y
@@ -3202,6 +3246,10 @@ PrefabInstance:
     - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Name
       value: Block_Thin (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5473499178249553342, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Size.y
@@ -3400,6 +3448,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2619026222008169048, guid: bd45513c8cf6d24468d1b0cabacc49aa, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8402592414569841192, guid: bd45513c8cf6d24468d1b0cabacc49aa, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.5
@@ -3463,7 +3515,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.y
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Name
@@ -3973,6 +4025,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2154313800903378206, guid: 4407f35f7487e614daf2cb85d947a561, type: 3}
+      propertyPath: cameraMoveRadius
+      value: 12.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2154313800903378206, guid: 4407f35f7487e614daf2cb85d947a561, type: 3}
+      propertyPath: maxDetourDistance
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4827889389960138441, guid: 4407f35f7487e614daf2cb85d947a561, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1
@@ -4103,7 +4163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4754676106157755757, guid: ccae25f192e913f42aed57bd766ec728, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 4754676106157755757, guid: ccae25f192e913f42aed57bd766ec728, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4554,11 +4614,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2447413550100082073, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.y
-      value: 2.5
+      value: 2.25
       objectReference: {fileID: 0}
     - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Name
       value: Block_Thin (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833898594025178340, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5473499178249553342, guid: eb9792eb7ffe1854881044425a466bbe, type: 3}
       propertyPath: m_Size.y
