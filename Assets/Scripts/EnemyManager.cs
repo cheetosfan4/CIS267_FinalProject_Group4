@@ -8,7 +8,7 @@ public class EnemyManager : MonoBehaviour
     public Transform target;
     public float moveSpeed;
     public float enemyHealth;
-    public float cameraMoveRadius = 10;
+    public float cameraMoveRadius = 12.2f;
 
     public LayerMask obstacleMask;               // layers considered as blocking obstacles
     public float maxDetourDistance = 4;          // how far to sample detour points from enemy
