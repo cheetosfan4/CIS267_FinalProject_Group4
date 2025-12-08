@@ -312,6 +312,15 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void addPlayerHealth(int amount) {
+        playerHealth += amount;
+        if (playerHealth > 5) {
+            playerHealth = 5;
+        }
+        Debug.Log("player health increased by " + amount + ", current health: " + playerHealth);
+        updatePips();
+    }
+
     private void updatePips() {
         //starts at end of pips array
         for (int i = pips.Length -1; i >= 0; i--) {

@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour {
 
+    public GameObject knifePrefab;
+    public float knifeStabLength;
     public float moveSpeed;
     public Sprite[] sprites;
     private Rigidbody2D rb;
@@ -12,6 +14,8 @@ public class PlayerManager : MonoBehaviour {
     private Vector2 currentRoom;
     private bool canMove;
     private int currentDirection;
+    private float knifeTimer;
+    private GameObject myKnife;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -19,10 +23,16 @@ public class PlayerManager : MonoBehaviour {
         currentRoom = Vector2.zero;
         canMove = true;
         currentDirection = 0;
+        knifeTimer = 0;
     }
 
     void Update() {
         movePlayer();
+        attack();
+
+        if (knifeTimer > 0) {
+            knifeTimer -= Time.deltaTime;
+        }
     }
 
     private void movePlayer() {
@@ -64,6 +74,61 @@ public class PlayerManager : MonoBehaviour {
             if (direction != 99) {
                 sr.sprite = sprites[direction];
                 currentDirection = direction;
+            }
+        }
+    }
+
+    private void attack() {
+        if (Time.timeScale != 0) {
+            if (Input.GetKeyDown(KeyCode.F) && knifeTimer <= 0 && myKnife == null && canMove) {
+                float newX = 0;
+                float newY = 0;
+                Vector3 rotation = Vector3.zero;
+                knifeTimer = knifeStabLength;
+                myKnife = Instantiate(knifePrefab);
+                myKnife.transform.position = this.gameObject.transform.position;
+                
+                switch (currentDirection) {
+                    //front
+                    case 0: {
+                            newY = -0.75f;
+                            rotation.z = -90;
+                            break;
+                        }
+                    //back
+                    case 1: {
+                            newY = 0.75f;
+                            rotation.z = 90;
+                            break;
+                        }
+                    //left
+                    case 2: {
+                            newX = -0.75f;
+                            rotation.z = 180;
+                            break;
+                        }
+                    //right
+                    case 3: {
+                            newX = 0.75f;
+                            break;
+                        }
+                }
+
+                myKnife.transform.position += new Vector3(newX, newY, 0);
+                myKnife.transform.eulerAngles = rotation;
+                canMove = false;
+            }
+            else if (myKnife != null && myKnife.GetComponent<KnifeScript>().hasCollided() && knifeTimer > 0) {
+                if (myKnife.GetComponent<KnifeScript>().hasCollided()) {
+                    GameObject enemyCollider = myKnife.GetComponent<KnifeScript>().getEnemyCollider();
+                    EnemyManager enemy = enemyCollider.GetComponent<EnemyManager>();
+
+                    hitEnemy(enemy, enemyCollider);
+                }
+            }
+            else if (myKnife != null && knifeTimer <= 0) {
+                Destroy(myKnife);
+                canMove = true;
             }
         }
     }
@@ -182,32 +247,33 @@ public class PlayerManager : MonoBehaviour {
             }
             else
             {
-                enemy.lowerEnemyHealth(1);
-                if(enemy.enemyHealth > 0)
-                {
-                    float enemyKnockbackDistance = 2.5f;
-                    float knockbackDuration = 0.12f;
-
-                    // direction from enemy to player
-                    Vector2 enemyPos = collision.gameObject.transform.position;
-                    Vector2 playerPos = rb.position;
-                    Vector2 dir = (playerPos - enemyPos);
-                    if (dir.sqrMagnitude < 0.0001f)
-                    {
-                        // fallback if positions almost identical
-                        dir = Vector2.up;
-                    }
-                    dir.Normalize();
-
-                    // tell enemy to move the opposite direction (smoothly)
-                    if (enemy != null)
-                    {
-                        enemy.ApplyKnockback(-dir, enemyKnockbackDistance, knockbackDuration);
-                    }
-                }
+                hitEnemy(enemy, collision.gameObject);
             }
         }
 
+    }
+
+    public void hitEnemy(EnemyManager enemy, GameObject enemyCollider) {
+        enemy.lowerEnemyHealth(1);
+        if (enemy.enemyHealth > 0) {
+            float enemyKnockbackDistance = 2.5f;
+            float knockbackDuration = 0.12f;
+
+            // direction from enemy to player
+            Vector2 enemyPos = enemyCollider.transform.position;
+            Vector2 playerPos = rb.position;
+            Vector2 dir = (playerPos - enemyPos);
+            if (dir.sqrMagnitude < 0.0001f) {
+                // fallback if positions almost identical
+                dir = Vector2.up;
+            }
+            dir.Normalize();
+
+            // tell enemy to move the opposite direction (smoothly)
+            if (enemy != null) {
+                enemy.ApplyKnockback(-dir, enemyKnockbackDistance, knockbackDuration);
+            }
+        }
     }
 
     public void setCanMove(bool b) {

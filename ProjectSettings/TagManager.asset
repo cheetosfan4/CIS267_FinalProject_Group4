@@ -11,6 +11,9 @@ TagManager:
   - Warp
   - GateToThree
   - Item
+  - CannonBall
+  - Destructible
+  - Bird
   layers:
   - Default
   - TransparentFX
