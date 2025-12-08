@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Dynamic;
 using UnityEngine;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
 public class HammerScript : MonoBehaviour {
     private ItemIdentifier itemID;
