@@ -211,7 +211,13 @@ public class EnemyManager : MonoBehaviour
             if (enemyHealth <= 0)
             {
             isDead = true;
-               gameObject.SetActive(false);
+            gameObject.SetActive(false);
+            if (this.gameObject.name == "Boss_Enemy" && isDead) {
+                GameObject bossRoomPresence = GameObject.FindGameObjectWithTag("BossRoom");
+                if (bossRoomPresence != null) {
+                    Destroy(bossRoomPresence);
+                }
+            }
             }
     }
 }

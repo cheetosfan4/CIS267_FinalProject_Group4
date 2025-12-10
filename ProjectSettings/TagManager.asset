@@ -14,6 +14,8 @@ TagManager:
   - CannonBall
   - Destructible
   - Bird
+  - Chest
+  - BossRoom
   layers:
   - Default
   - TransparentFX

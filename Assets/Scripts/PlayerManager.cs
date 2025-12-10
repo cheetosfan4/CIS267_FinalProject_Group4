@@ -16,6 +16,8 @@ public class PlayerManager : MonoBehaviour {
     private int currentDirection;
     private float knifeTimer;
     private GameObject myKnife;
+    private GameObject lastChestTouched;
+    private MusicManager musicPlayer;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -24,11 +26,13 @@ public class PlayerManager : MonoBehaviour {
         canMove = true;
         currentDirection = 0;
         knifeTimer = 0;
+        musicPlayer = GameManager.instance.gameObject.GetComponentInChildren<MusicManager>();
     }
 
     void Update() {
         movePlayer();
         attack();
+        openChest();
 
         if (knifeTimer > 0) {
             knifeTimer -= Time.deltaTime;
@@ -124,11 +128,25 @@ public class PlayerManager : MonoBehaviour {
                     EnemyManager enemy = enemyCollider.GetComponent<EnemyManager>();
 
                     hitEnemy(enemy, enemyCollider);
+                    //Debug.Log("hit enemy");
+                    myKnife.GetComponent<KnifeScript>().setCollided(false);
                 }
             }
             else if (myKnife != null && knifeTimer <= 0) {
                 Destroy(myKnife);
                 canMove = true;
+            }
+        }
+    }
+
+    private void openChest() {
+        if (Input.GetKeyUp(KeyCode.Q) && lastChestTouched != null) {
+            float distanceBetween = Vector2.Distance(lastChestTouched.transform.position, rb.position);
+            Debug.Log("calculated chest distance");
+
+            if (distanceBetween <= 2) {
+                lastChestTouched.GetComponent<ChestManager>().open();
+                Debug.Log("opened chest");
             }
         }
     }
@@ -193,6 +211,15 @@ public class PlayerManager : MonoBehaviour {
             item.GetComponent<BoxCollider2D>().enabled = false;
             item.transform.SetParent(GameManager.instance.transform);
         }
+        if (collision.CompareTag("BossRoom")) {
+            musicPlayer.playBossMusic();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.CompareTag("BossRoom")) {
+            musicPlayer.playSceneMusic();
+        }
     }
 
     //this is so the player can't stand on top of pits after using the hammer
@@ -249,6 +276,9 @@ public class PlayerManager : MonoBehaviour {
             {
                 hitEnemy(enemy, collision.gameObject);
             }
+        }
+        if (collision.gameObject.CompareTag("Chest")) {
+            lastChestTouched = collision.gameObject;
         }
 
     }

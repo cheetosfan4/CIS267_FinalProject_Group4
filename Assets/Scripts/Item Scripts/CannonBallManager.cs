@@ -7,6 +7,7 @@ public class CannonBallManager : MonoBehaviour {
     private bool ready;
     private Vector2 direction;
     private Rigidbody2D rb;
+    private GameObject lastEnemyHit;
     void Awake() {
         rb = GetComponent<Rigidbody2D>();
         ready = false;
@@ -27,9 +28,10 @@ public class CannonBallManager : MonoBehaviour {
             Destroy(collision.gameObject);
             Destroy(this.gameObject);
         }
-        if (collision.gameObject.CompareTag("Enemy")) {
+        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject != lastEnemyHit) {
             GameObject player = GameObject.FindWithTag("Player");
             player.GetComponent<PlayerManager>().hitEnemy(collision.gameObject.GetComponent<EnemyManager>(), collision.gameObject);
+            lastEnemyHit = collision.gameObject;
         }
     }
 

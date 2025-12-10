@@ -15,14 +15,13 @@ public class KnifeScript : MonoBehaviour {
             enemyCollider = collision.gameObject;
             enemy = enemyCollider.GetComponent<EnemyManager>();
         }
-        else if (collision.gameObject.CompareTag("Bird")) {
-            Destroy(collision.gameObject);
-            collided = false;
-        }
     }
 
     public bool hasCollided() {
         return collided;
+    }
+    public void setCollided(bool b) {
+        collided = b;
     }
     public EnemyManager getEnemy() {
         return enemy;

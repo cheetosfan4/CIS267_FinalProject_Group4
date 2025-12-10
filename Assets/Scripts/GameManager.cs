@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour {
     private List<GameObject> items;
     public GameObject equippedItemSlot;
     private GameObject equippedItem;
+    public MusicManager musicPlayer;
 
     private bool gameLoaded;
     private bool gamePaused;
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour {
         if (scene.name != "MainMenu") {
             defaultInitialize();
         }
+        musicPlayer.playSceneMusic();
     }
 
     private void defaultInitialize() {
