@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    public GameObject artifact;
     private Transform cameraTransform;
     public Transform target;
     public float moveSpeed;
@@ -213,6 +214,8 @@ public class EnemyManager : MonoBehaviour
             isDead = true;
             gameObject.SetActive(false);
             if (this.gameObject.name == "Boss_Enemy" && isDead) {
+                GameObject spawnedArtifact = Instantiate(artifact);
+                spawnedArtifact.transform.position = this.transform.position;
                 GameObject bossRoomPresence = GameObject.FindGameObjectWithTag("BossRoom");
                 if (bossRoomPresence != null) {
                     Destroy(bossRoomPresence);

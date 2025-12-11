@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour {
     public GameObject equippedItemSlot;
     private GameObject equippedItem;
     public MusicManager musicPlayer;
+    public GameObject artifact1;
+    public GameObject artifact2;
+    public GameObject artifact3;
+    public Sprite[] artifactSprites;
+    public GameObject artifactTrio;
 
     private bool gameLoaded;
     private bool gamePaused;
@@ -34,6 +39,7 @@ public class GameManager : MonoBehaviour {
     private int playerHealth;
     private bool dead;
     private float invulnerabilityTimer;
+    private int artifactsCollected;
 
     private void Awake() {
         if (instance != null && instance != this) {
@@ -129,6 +135,7 @@ public class GameManager : MonoBehaviour {
             SceneManager.LoadScene("LevelOne");
             //defaultInitialize();
             clearItems();
+            artifactsCollected = 0;
         }
         //resuming the game from pause screen
         else if (gamePaused) {
@@ -219,7 +226,42 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void artifactCollected() {
+        artifactsCollected++;
+        if (artifactsCollected == 3) {
+            GameObject artifactItem = Instantiate(artifactTrio);
+            artifactItem.transform.position = currentPlayer.transform.position;
+        }
+    }
+
+    private void updateArtifacts() {
+        artifact1.GetComponent<Image>().sprite = artifactSprites[0];
+        artifact2.GetComponent<Image>().sprite = artifactSprites[0];
+        artifact3.GetComponent<Image>().sprite = artifactSprites[0];
+        switch (artifactsCollected) {
+            case 0: {
+                    break;
+                }
+            case 1: {
+                    artifact1.GetComponent<Image>().sprite = artifactSprites[1];
+                    break;
+                }
+            case 2: {
+                    artifact1.GetComponent<Image>().sprite = artifactSprites[1];
+                    artifact2.GetComponent<Image>().sprite = artifactSprites[1];
+                    break;
+                }
+            case 3: {
+                    artifact1.GetComponent<Image>().sprite = artifactSprites[1];
+                    artifact2.GetComponent<Image>().sprite = artifactSprites[1];
+                    artifact3.GetComponent<Image>().sprite = artifactSprites[1];
+                    break;
+                }
+        }
+    }
+
     private void loadItems() {
+        updateArtifacts();
         //disables all inventory slot images before loading them, in case the player lost any items
         for (int i = 0; i < inventorySlots.Length; i++) {
             inventorySlots[i].GetComponent<Image>().enabled = false;

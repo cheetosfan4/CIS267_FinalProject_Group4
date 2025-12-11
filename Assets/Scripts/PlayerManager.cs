@@ -214,6 +214,10 @@ public class PlayerManager : MonoBehaviour {
         if (collision.CompareTag("BossRoom")) {
             musicPlayer.playBossMusic();
         }
+        if (collision.CompareTag("Artifact")) {
+            GameManager.instance.artifactCollected();
+            Destroy(collision.gameObject);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {

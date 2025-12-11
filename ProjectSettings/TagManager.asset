@@ -16,6 +16,8 @@ TagManager:
   - Bird
   - Chest
   - BossRoom
+  - Artifact
+  - DestructibleTough
   layers:
   - Default
   - TransparentFX

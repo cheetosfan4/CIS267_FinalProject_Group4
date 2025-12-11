@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486792ca73e92ae439a9dd6b7863d34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
+  artifact: {fileID: 9146586612230730820, guid: a227fd0ec7636f34f819c9b713d0c2f9, type: 3}
   target: {fileID: 0}
   moveSpeed: 2
   enemyHealth: 5
