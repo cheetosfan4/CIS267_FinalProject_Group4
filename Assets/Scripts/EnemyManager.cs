@@ -17,6 +17,7 @@ public class EnemyManager : MonoBehaviour
     public float arrivalThreshold = 0.1f;        // when detour reached, consider arrived
 
     private bool isDead;
+    public bool finalboss = false;
     private bool hasDetour;
     private Vector2 detourTarget;
 

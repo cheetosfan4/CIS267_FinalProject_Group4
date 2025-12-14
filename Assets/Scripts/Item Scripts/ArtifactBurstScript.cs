@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ArtifactBurstScript : MonoBehaviour {
@@ -22,11 +23,23 @@ public class ArtifactBurstScript : MonoBehaviour {
         if (collision.gameObject.CompareTag("DestructibleTough")) {
             Destroy(collision.gameObject);
         }
-        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject != lastEnemyHit) {
+        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject != lastEnemyHit)
+        {
             GameObject player = GameObject.FindWithTag("Player");
             player.GetComponent<PlayerManager>().hitEnemy(collision.gameObject.GetComponent<EnemyManager>(), collision.gameObject);
             lastEnemyHit = collision.gameObject;
+
+            if (lastEnemyHit.name == "Final_Boss")
+            {
+                FinalBossScript boss = collision.gameObject.GetComponent<FinalBossScript>();
+                if (boss.shieldUp)
+                {
+                    boss.shieldBreak();
+                }
+                return;
+            }
         }
+
     }
 
     public void setReady() {

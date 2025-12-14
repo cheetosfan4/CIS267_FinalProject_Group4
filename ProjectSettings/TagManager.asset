@@ -18,6 +18,7 @@ TagManager:
   - BossRoom
   - Artifact
   - DestructibleTough
+  - Burst
   layers:
   - Default
   - TransparentFX

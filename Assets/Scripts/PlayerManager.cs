@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,7 @@ public class PlayerManager : MonoBehaviour {
     private Vector2 currentRoom;
     private bool canMove;
     private int currentDirection;
-    private float knifeTimer;
+    public float knifeTimer;
     private GameObject myKnife;
     private GameObject lastChestTouched;
     private MusicManager musicPlayer;
@@ -287,9 +288,31 @@ public class PlayerManager : MonoBehaviour {
 
     }
 
-    public void hitEnemy(EnemyManager enemy, GameObject enemyCollider) {
-        enemy.lowerEnemyHealth(1);
-        if (enemy.enemyHealth > 0) {
+    public void hitEnemy(EnemyManager enemy, GameObject enemyCollider) 
+    {
+        if (enemy == null) return;
+
+        if (enemy.finalboss)
+        {
+            FinalBossScript finalBoss = enemyCollider.GetComponent<FinalBossScript>();
+
+            if (finalBoss != null && finalBoss.shieldUp)
+            {
+                enemy.lowerEnemyHealth(0);
+            }
+            else if (finalBoss != null && !finalBoss.shieldUp)
+            {
+                enemy.lowerEnemyHealth(1);
+            }
+        }
+
+        else 
+        {
+            enemy.lowerEnemyHealth(1);
+        }
+
+        if (enemy.enemyHealth > 0)
+        {
             float enemyKnockbackDistance = 2.5f;
             float knockbackDuration = 0.12f;
 
@@ -297,14 +320,16 @@ public class PlayerManager : MonoBehaviour {
             Vector2 enemyPos = enemyCollider.transform.position;
             Vector2 playerPos = rb.position;
             Vector2 dir = (playerPos - enemyPos);
-            if (dir.sqrMagnitude < 0.0001f) {
+            if (dir.sqrMagnitude < 0.0001f)
+            {
                 // fallback if positions almost identical
                 dir = Vector2.up;
             }
             dir.Normalize();
 
             // tell enemy to move the opposite direction (smoothly)
-            if (enemy != null) {
+            if (enemy != null)
+            {
                 enemy.ApplyKnockback(-dir, enemyKnockbackDistance, knockbackDuration);
             }
         }
