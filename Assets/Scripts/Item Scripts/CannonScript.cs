@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CannonScript : MonoBehaviour {
     public GameObject cannonBallPrefab;
+    public AudioClip cannonShot;
     private ItemIdentifier itemID;
     private GameObject player;
     public float cannonShootLength;
@@ -83,6 +84,7 @@ public class CannonScript : MonoBehaviour {
                     //Debug.Log("registered cannon press");
                     player = GameManager.instance.getCurrentPlayer();
                     shot = true;
+                    AudioSource.PlayClipAtPoint(cannonShot, player.transform.position);
                     //Debug.Log("cannon timer set to " + cannonTimer);
                 }
             }

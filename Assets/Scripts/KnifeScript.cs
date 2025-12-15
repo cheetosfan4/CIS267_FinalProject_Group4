@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class KnifeScript : MonoBehaviour {
+    public AudioClip hit;
     private bool collided;
     private EnemyManager enemy;
     private GameObject enemyCollider;
@@ -14,6 +15,7 @@ public class KnifeScript : MonoBehaviour {
             collided = true;
             enemyCollider = collision.gameObject;
             enemy = enemyCollider.GetComponent<EnemyManager>();
+            AudioSource.PlayClipAtPoint(hit, transform.position, 1);
         }
     }
 

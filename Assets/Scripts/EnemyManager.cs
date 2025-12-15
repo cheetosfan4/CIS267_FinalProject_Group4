@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public GameObject artifact;
+    public GameObject warp;
     private Transform cameraTransform;
     public Transform target;
     public float moveSpeed;
@@ -214,12 +215,39 @@ public class EnemyManager : MonoBehaviour
             {
             isDead = true;
             gameObject.SetActive(false);
-            if (this.gameObject.name == "Boss_Enemy" && isDead) {
+            if ((this.gameObject.name == "Boss_Enemy" || this.gameObject.name == "False_Boss") && isDead) {
                 GameObject spawnedArtifact = Instantiate(artifact);
                 spawnedArtifact.transform.position = this.transform.position;
                 GameObject bossRoomPresence = GameObject.FindGameObjectWithTag("BossRoom");
                 if (bossRoomPresence != null) {
                     Destroy(bossRoomPresence);
+                }
+                GameObject blockade = GameObject.FindGameObjectWithTag("Blockade");
+                if (blockade != null) {
+                    Destroy(blockade);
+                }
+                GameObject[] warnings = GameObject.FindGameObjectsWithTag("Warning");
+                if (warnings != null) {
+                    for (int i = 0; i < warnings.Length; i++) {
+                        Destroy(warnings[i]);
+                    }
+                }
+                GameObject[] bossPits = GameObject.FindGameObjectsWithTag("BossPit");
+                if (bossPits != null) {
+                    for (int i = 0; i < bossPits.Length; i++) {
+                        Destroy(bossPits[i]);
+                    }
+                }
+            }
+            if (this.gameObject.name == "False_Boss") {
+                GameObject warpToStart = Instantiate(warp);
+                warpToStart.transform.position = new Vector2(39f, -23.5f);
+            }
+            if (this.gameObject.name == "Final_Boss") {
+                GameManager.instance.wonGame();
+                GameObject finalBossRoomPresence = GameObject.FindGameObjectWithTag("FinalBossRoom");
+                if (finalBossRoomPresence != null) {
+                    Destroy(finalBossRoomPresence);
                 }
             }
             }

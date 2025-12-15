@@ -100,7 +100,7 @@ public class BossOneScript : MonoBehaviour
                 spot.position,
                 spot.rotation
             );
-
+            warning.tag = "Warning";
             warnings.Add(warning);
         }
 
@@ -120,6 +120,7 @@ public class BossOneScript : MonoBehaviour
 
             GameObject pit = spot.gameObject;
             pit.SetActive(true);
+            pit.tag = "BossPit";
 
             if (!spawnedHoles.Contains(pit))
                 spawnedHoles.Add(pit);

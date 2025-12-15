@@ -19,6 +19,10 @@ TagManager:
   - Artifact
   - DestructibleTough
   - Burst
+  - Blockade
+  - Warning
+  - BossPit
+  - FinalBossRoom
   layers:
   - Default
   - TransparentFX

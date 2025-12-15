@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CannonScript
   cannonBallPrefab: {fileID: 4820061584471289477, guid: c731a4b735362a744bb567640707f984, type: 3}
+  cannonShot: {fileID: 8300000, guid: 9b33b3cec704308458f83281ec5ff75d, type: 3}
   cannonShootLength: 0.23
   cannonShootSprites: []
 --- !u!212 &751876701951092269

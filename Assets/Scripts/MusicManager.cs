@@ -9,6 +9,7 @@ public class MusicManager : MonoBehaviour {
     private void Start() {
         musicPlayer = GetComponent<AudioSource>();
         currentScene = SceneManager.GetActiveScene().name;
+        musicPlayer.volume = 0.75f;
     }
 
     public void playSceneMusic() {
@@ -26,6 +27,9 @@ public class MusicManager : MonoBehaviour {
         else if (currentScene == "LevelThree") {
             musicPlayer.clip = music[3];
         }
+        else if (currentScene == "MainMenu") {
+            musicPlayer.clip = music[3];
+        }
         else {
             musicPlayer.clip = music[0];
         }
@@ -35,6 +39,11 @@ public class MusicManager : MonoBehaviour {
     public void playBossMusic() {
         musicPlayer.Stop();
         musicPlayer.clip = music[4];
+        musicPlayer.Play();
+    }
+    public void playFinalBossMusic() {
+        musicPlayer.Stop();
+        musicPlayer.clip = music[5];
         musicPlayer.Play();
     }
 }

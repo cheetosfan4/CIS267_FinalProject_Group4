@@ -120,6 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486792ca73e92ae439a9dd6b7863d34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
+  artifact: {fileID: 0}
+  warp: {fileID: 0}
   target: {fileID: 0}
   moveSpeed: 2
   enemyHealth: 1
@@ -130,6 +132,7 @@ MonoBehaviour:
   maxDetourDistance: 4
   avoidSampleAngleStep: 20
   arrivalThreshold: 0.1
+  finalboss: 0
 --- !u!1 &2110828205494913331
 GameObject:
   m_ObjectHideFlags: 0

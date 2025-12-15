@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour {
 
     public GameObject knifePrefab;
+    public AudioClip hurt;
+    private AudioSource footstepAudio;
     public float knifeStabLength;
     public float moveSpeed;
     public Sprite[] sprites;
@@ -19,6 +21,7 @@ public class PlayerManager : MonoBehaviour {
     private GameObject myKnife;
     private GameObject lastChestTouched;
     private MusicManager musicPlayer;
+    private Vector2 knockback;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -28,6 +31,8 @@ public class PlayerManager : MonoBehaviour {
         currentDirection = 0;
         knifeTimer = 0;
         musicPlayer = GameManager.instance.gameObject.GetComponentInChildren<MusicManager>();
+        knockback = Vector2.zero;
+        footstepAudio = GetComponent<AudioSource>();
     }
 
     void Update() {
@@ -44,9 +49,19 @@ public class PlayerManager : MonoBehaviour {
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
 
-        if (canMove) {
+        if ((inputHorizontal != 0 || inputVertical != 0) && Time.timeScale != 0 && !GameManager.instance.inCutscene()) {
+            footstepAudio.enabled = true;
+        }
+        else {
+            footstepAudio.enabled = false;
+        }
+
+        if (canMove && !GameManager.instance.inCutscene()) {
             rb.linearVelocity = new Vector2(moveSpeed * inputHorizontal, moveSpeed * inputVertical);
             flipPlayer();
+        }
+        else {
+            rb.linearVelocity = Vector2.zero;
         }
     }
 
@@ -184,6 +199,7 @@ public class PlayerManager : MonoBehaviour {
         if (collision.CompareTag("Pit") && canMove) {
             GameObject camera = GameObject.FindWithTag("MainCamera");
             GameManager.instance.lowerPlayerHealth(1);
+            AudioSource.PlayClipAtPoint(hurt, rb.position, 1);
 
             //sets player's position to the pit's respawn point
                 if (collision.gameObject.transform.GetChild(0) != null)
@@ -215,6 +231,9 @@ public class PlayerManager : MonoBehaviour {
         if (collision.CompareTag("BossRoom")) {
             musicPlayer.playBossMusic();
         }
+        if (collision.CompareTag("FinalBossRoom")) {
+            musicPlayer.playFinalBossMusic();
+        }
         if (collision.CompareTag("Artifact")) {
             GameManager.instance.artifactCollected();
             Destroy(collision.gameObject);
@@ -223,6 +242,9 @@ public class PlayerManager : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D collision) {
         if (collision.CompareTag("BossRoom")) {
+            musicPlayer.playSceneMusic();
+        }
+        if (collision.CompareTag("FinalBossRoom")) {
             musicPlayer.playSceneMusic();
         }
     }
@@ -252,8 +274,9 @@ public class PlayerManager : MonoBehaviour {
             if (canMove)
             {
                 GameManager.instance.lowerPlayerHealth(1);
+                AudioSource.PlayClipAtPoint(hurt, rb.position, 1);
                 // Knockback on enemy collision
-                float playerKnockbackDistance = 1.0f;
+                //float playerKnockbackDistance = 1.0f;
                 float enemyKnockbackDistance = 1.0f;
                 float knockbackDuration = 0.12f;
 
@@ -269,7 +292,7 @@ public class PlayerManager : MonoBehaviour {
                 dir.Normalize();
 
                 // push player back immediately
-                rb.position = rb.position + dir * playerKnockbackDistance;
+                //rb.position = rb.position + dir * playerKnockbackDistance;
 
                 // tell enemy to move the opposite direction (smoothly)
                 if (enemy != null)

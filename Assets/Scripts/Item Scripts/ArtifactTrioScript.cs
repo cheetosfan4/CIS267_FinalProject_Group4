@@ -3,6 +3,7 @@ using UnityEngine;
 public class ArtifactTrioScript : MonoBehaviour {
 
     public GameObject burstPrefab;
+    public AudioClip burstShot;
     private ItemIdentifier itemID;
     private GameObject player;
     public float burstShootLength;
@@ -78,6 +79,7 @@ public class ArtifactTrioScript : MonoBehaviour {
                 if (Input.GetKeyDown(KeyCode.E) && burstTimer <= 0) {
                     player = GameManager.instance.getCurrentPlayer();
                     shot = true;
+                    AudioSource.PlayClipAtPoint(burstShot, player.transform.position);
                 }
             }
         }

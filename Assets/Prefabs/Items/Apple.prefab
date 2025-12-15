@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4118e11ae553ae340b4373be1bc866ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AppleScript
+  bite: {fileID: 8300000, guid: 207b7c2b668f89b4a97937d8276548be, type: 3}
 --- !u!212 &2588638648028120819
 SpriteRenderer:
   m_ObjectHideFlags: 0

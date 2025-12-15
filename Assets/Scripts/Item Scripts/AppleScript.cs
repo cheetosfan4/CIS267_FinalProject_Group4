@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class AppleScript : MonoBehaviour {
+    public AudioClip bite;
     private ItemIdentifier itemID;
     private bool triggered;
 
@@ -12,6 +13,7 @@ public class AppleScript : MonoBehaviour {
 
         if (triggered) {
             GameManager.instance.addPlayerHealth(2);
+            AudioSource.PlayClipAtPoint(bite, GameManager.instance.getCurrentPlayer().transform.position);
             Destroy(this.gameObject);
         }
     }

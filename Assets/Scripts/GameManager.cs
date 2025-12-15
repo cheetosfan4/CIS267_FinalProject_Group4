@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour {
     public GameObject artifact3;
     public Sprite[] artifactSprites;
     public GameObject artifactTrio;
+    public AudioClip equipNoise;
+    public AudioClip menuNoise;
 
     private bool gameLoaded;
     private bool gamePaused;
@@ -40,6 +42,13 @@ public class GameManager : MonoBehaviour {
     private bool dead;
     private float invulnerabilityTimer;
     private int artifactsCollected;
+
+
+    private bool cutscene;
+    public GameObject introText;
+    public GameObject outroText;
+    public float textDuration;
+    private float textTimer;
 
     private void Awake() {
         if (instance != null && instance != this) {
@@ -55,6 +64,9 @@ public class GameManager : MonoBehaviour {
         selectorTransform = selector.GetComponent<RectTransform>();
 
         items = new List<GameObject>();
+        cutscene = false;
+        introText.SetActive(false);
+        outroText.SetActive(false);
 
         //for starting the game from a different scene in the editor
         if (SceneManager.GetActiveScene().name != "MainMenu") {
@@ -62,6 +74,7 @@ public class GameManager : MonoBehaviour {
         }
         //for starting the game from the main menu
         else {
+            outroText.SetActive(false);
             title.SetActive(true);
             menuButtons.SetActive(true);
             inventory.SetActive(false);
@@ -83,7 +96,42 @@ public class GameManager : MonoBehaviour {
     private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (scene.name != "MainMenu") {
             defaultInitialize();
+
+            if (scene.name == "LevelOne") {
+                artifactsCollected = 0;
+            }
+            if (scene.name == "LevelTwo") {
+                artifactsCollected = 1;
+            }
+            if (scene.name == "LevelThree") {
+                artifactsCollected = 2;
+            }
+            updateArtifacts();
+            if (artifactsCollected >= 3) {
+                GameObject artifactItem = Instantiate(artifactTrio);
+                artifactItem.transform.position = currentPlayer.transform.position;
+            }
+
+            if (scene.name == "LevelOne" && cutscene) {
+                introText.SetActive(true);
+                textTimer = textDuration;
+            }
+
         }
+        else {
+            introText.SetActive(false);
+            outroText.SetActive(false);
+            cutscene = false;
+            gameLoaded = false;
+            gamePaused = false;
+            inInventory = false;
+            dead = false;
+            title.SetActive(true);
+            menuButtons.SetActive(true);
+            inventory.SetActive(false);
+            health.SetActive(false);
+        }
+        introText.SetActive(false);
         musicPlayer.playSceneMusic();
     }
 
@@ -97,6 +145,7 @@ public class GameManager : MonoBehaviour {
         title.SetActive(false);
         menuButtons.SetActive(false);
         inventory.SetActive(false);
+        introText.SetActive(false);
         dead = false;
         Time.timeScale = 1;
         gameLoaded = true;
@@ -119,7 +168,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Update() {
-        loadNewLevel();
+        cheats();
         pauseGame();
         manageInventory();
 
@@ -127,11 +176,36 @@ public class GameManager : MonoBehaviour {
         if (invulnerabilityTimer > 0) {
             invulnerabilityTimer -= Time.deltaTime;
         }
+        if (textTimer > 0) {
+            Debug.Log("GREATER ZERO");
+            introText.SetActive(true);
+            textTimer -= Time.deltaTime;
+        }
+        else if (cutscene && textTimer <= 0) {
+            if (SceneManager.GetActiveScene().name == "LevelThree") {
+                outroText.SetActive(false);
+                cutscene = false;
+                SceneManager.LoadScene("MainMenu");
+            }
+            Debug.Log("LESS ZERO");
+            introText.SetActive(false);
+            outroText.SetActive(false);
+            //Time.timeScale = 1;
+            cutscene = false;
+        }
     }
 
     public void startGame() {
         //starting the game from the main menu
         if (!gameLoaded || dead) {
+            textTimer = textDuration;
+            if (SceneManager.GetActiveScene().name == "MainMenu") {
+                cutscene = true;
+            }
+            else {
+                cutscene = false;
+                textTimer = 0;
+            }
             SceneManager.LoadScene("LevelOne");
             //defaultInitialize();
             clearItems();
@@ -143,7 +217,6 @@ public class GameManager : MonoBehaviour {
             Time.timeScale = 1;
             gamePaused = false;
         }
-        //need to add a restart button for the pause menu
     }
 
     public void exitGame() {
@@ -164,30 +237,40 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private void loadNewLevel() {
-        if (gameLoaded && !dead && !inInventory) {
-            //this moves the player between all of the different levels
-            //just for testing
-            bool sceneLoaded = false;
+    public void wonGame() {
+        cutscene = true;
+        textTimer = textDuration;
+        outroText.SetActive(true);
+    }
+
+    private void cheats() {
+        if (gameLoaded && !dead && !inInventory && !cutscene) {
+            //moves the player between all of the different levels
+            //bool sceneLoaded = false;
             if (Input.GetKeyDown(KeyCode.Alpha0)) {
                 SceneManager.LoadScene("Testing");
-                sceneLoaded = true;
+                //sceneLoaded = true;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                artifactsCollected = 0;
                 SceneManager.LoadScene("LevelOne");
-                sceneLoaded = true;
+                //sceneLoaded = true;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                artifactsCollected = 1;
                 SceneManager.LoadScene("LevelTwo");
-                sceneLoaded = true;
+                //sceneLoaded = true;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                artifactsCollected = 2;
                 SceneManager.LoadScene("LevelThree");
-                sceneLoaded = true;
+                //sceneLoaded = true;
             }
 
-            if (sceneLoaded) {
-                //defaultInitialize();
+            //full heals player
+            if (Input.GetKeyDown(KeyCode.H)) {
+                playerHealth = 5;
+                updatePips();
             }
         }
     }
@@ -294,6 +377,9 @@ public class GameManager : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.D)) {
                 currentSlot++;
             }
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A)) {
+                AudioSource.PlayClipAtPoint(menuNoise, currentPlayer.transform.position, 1);
+            }
 
             //allows selector to wrap around the slot list
             if (currentSlot < 0) {
@@ -321,6 +407,7 @@ public class GameManager : MonoBehaviour {
                 equippedItem = items[currentSlot];
                 items.Remove(equippedItem);
                 equippedItem.GetComponent<ItemIdentifier>().setEquipped(true);
+                AudioSource.PlayClipAtPoint(equipNoise, currentPlayer.transform.position, 1);
                 loadItems();
             }
             else if (equip && equippedItem != null) {
@@ -330,6 +417,7 @@ public class GameManager : MonoBehaviour {
                 items.Remove(equippedItem);
                 equippedItem.GetComponent<ItemIdentifier>().setEquipped(true);
                 oldItem.GetComponent<ItemIdentifier>().setEquipped(false);
+                AudioSource.PlayClipAtPoint(equipNoise, currentPlayer.transform.position, 1);
                 loadItems();
             }
             else if (swap) {
@@ -342,7 +430,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void lowerPlayerHealth(int amount) {
-        if (invulnerabilityTimer <= 0) {
+        if (invulnerabilityTimer <= 0 && !cutscene) {
             playerHealth -= amount;
             Debug.Log("player health lowered by " + amount + ", current health: " + playerHealth);
             updatePips();
@@ -402,5 +490,9 @@ public class GameManager : MonoBehaviour {
 
     public GameObject getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public bool inCutscene() {
+        return cutscene;
     }
 }

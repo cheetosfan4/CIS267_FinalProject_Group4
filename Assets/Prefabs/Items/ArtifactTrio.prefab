@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArtifactTrioScript
   burstPrefab: {fileID: 5192718284713006607, guid: c6ff82b9a0ccfac43b808fcef63d7fcb, type: 3}
+  burstShot: {fileID: 8300000, guid: 9b33b3cec704308458f83281ec5ff75d, type: 3}
   burstShootLength: 0.23
   burstShootSprites: []
 --- !u!212 &7422018578582218062
