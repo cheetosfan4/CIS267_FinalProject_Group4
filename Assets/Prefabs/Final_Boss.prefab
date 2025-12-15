@@ -79,12 +79,12 @@ SpriteRenderer:
   m_SortingLayerID: 1310451013
   m_SortingLayer: 4
   m_SortingOrder: 1
-  m_Sprite: {fileID: -4219667615955243262, guid: 68aa33f4b60b7df4cb409a5f1d71fef3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 68aa33f4b60b7df4cb409a5f1d71fef3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.26, y: 2.56}
+  m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
   artifact: {fileID: 9146586612230730820, guid: a227fd0ec7636f34f819c9b713d0c2f9, type: 3}
+  warp: {fileID: 0}
   target: {fileID: 0}
   moveSpeed: 2
   enemyHealth: 6

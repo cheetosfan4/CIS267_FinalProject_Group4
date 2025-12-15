@@ -4,11 +4,12 @@ using UnityEngine;
 //using static UnityEditor.Progress;
 
 public class HammerScript : MonoBehaviour {
+    public AudioClip strike;
     private ItemIdentifier itemID;
     private GameObject player;
     public float hammerSpeed;
     public float hammerTimerLength;
-    public Sprite[] hammerWieldSprites;
+    //public Sprite[] hammerWieldSprites;
     private float hammerTimer;
     bool reset;
 
@@ -49,7 +50,7 @@ public class HammerScript : MonoBehaviour {
 
             playerScript.setCanMove(false);
             playerRB.linearVelocity = new Vector2(hammerSpeed * horizontal, hammerSpeed * vertical);
-            playerSR.sprite = hammerWieldSprites[playerDirection];
+            //playerSR.sprite = hammerWieldSprites[playerDirection];
             reset = false;
             hammerTimer -= Time.deltaTime;
         }
@@ -59,9 +60,9 @@ public class HammerScript : MonoBehaviour {
             hammerTimer = 0;
             player = GameManager.instance.getCurrentPlayer();
             player.GetComponent<PlayerManager>().setCanMove(true);
-            Sprite[] sprites = player.GetComponent<PlayerManager>().sprites;
+            //Sprite[] sprites = player.GetComponent<PlayerManager>().sprites;
             //resets player sprite in case it gets stuck as one of the hammer ones
-            player.GetComponentInChildren<SpriteRenderer>().sprite = sprites[player.GetComponent<PlayerManager>().getDirectionFacing()];
+            //player.GetComponentInChildren<SpriteRenderer>().sprite = sprites[player.GetComponent<PlayerManager>().getDirectionFacing()];
         }
     }
 
@@ -74,6 +75,7 @@ public class HammerScript : MonoBehaviour {
                     //Debug.Log("registered hammer press");
                     player = GameManager.instance.getCurrentPlayer();
                     hammerTimer = hammerTimerLength;
+                    AudioSource.PlayClipAtPoint(strike, player.transform.position, 1);
                     //Debug.Log("hammer timer set to " + hammerTimer);
                 }
             }

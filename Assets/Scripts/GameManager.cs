@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     public static GameManager instance { get; private set; }
+    public GameObject background;
     public GameObject playerPrefab;
     public GameObject menuButtons;
     public GameObject title;
@@ -94,6 +95,7 @@ public class GameManager : MonoBehaviour {
         SceneManager.sceneLoaded -= onSceneLoaded;
     }
     private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
+        background.SetActive(false);
         if (scene.name != "MainMenu") {
             defaultInitialize();
 
@@ -119,6 +121,7 @@ public class GameManager : MonoBehaviour {
 
         }
         else {
+            background.SetActive(true);
             introText.SetActive(false);
             outroText.SetActive(false);
             cutscene = false;

@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: -116712077
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 052591718eb43ed4584f8aa7bdb67d72, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 28a29a2659760c348b5070ff7f75df52, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -120,7 +120,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3333334, y: 1.3333334, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3485151125826512279}
@@ -170,7 +170,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.75, y: 1}
   m_EdgeRadius: 0
 --- !u!50 &175996816722235949
 Rigidbody2D:
@@ -216,10 +216,10 @@ MonoBehaviour:
   knifeStabLength: 0.23
   moveSpeed: 5
   sprites:
-  - {fileID: 21300000, guid: 052591718eb43ed4584f8aa7bdb67d72, type: 3}
-  - {fileID: 21300000, guid: 4225937419f82a04eab8348b5d4162e2, type: 3}
-  - {fileID: 21300000, guid: b226eba6212eb4b42b584b8ec9ffea17, type: 3}
-  - {fileID: 21300000, guid: f2ad401fe732d424896386419f7c1fb1, type: 3}
+  - {fileID: 21300000, guid: 28a29a2659760c348b5070ff7f75df52, type: 3}
+  - {fileID: 21300000, guid: 9272b30edaa39dc41bb4ebbe6ee328b4, type: 3}
+  - {fileID: 21300000, guid: 873ed2fbd3e34df47b5bf212a8ff294d, type: 3}
+  - {fileID: 21300000, guid: 8e0b1b089c6bc5643b8fa778506aab10, type: 3}
   knifeTimer: 0
 --- !u!82 &4170335426590899035
 AudioSource:

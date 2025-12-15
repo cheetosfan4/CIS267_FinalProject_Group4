@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5fcb7c3fc1110148b1997d8eab24a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HammerScript
+  strike: {fileID: 8300000, guid: 9b33b3cec704308458f83281ec5ff75d, type: 3}
   hammerSpeed: 14
   hammerTimerLength: 0.23
   hammerWieldSprites:

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 68aa33f4b60b7df4cb409a5f1d71fef3
+guid: 40df5a46d00ffa24c850f8f26452d685
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4219667615955243262
-    second: shield 1_0
+      213: 284345790665501792
+    second: artifactlogo_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: shield 1_0
+      name: artifactlogo_0
       rect:
         serializedVersion: 2
-        x: 15
+        x: 0
         y: 0
-        width: 226
-        height: 256
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 20fa4c8f8aab075c0800000000000000
-      internalID: -4219667615955243262
+      spriteID: 06caef57df232f300800000000000000
+      internalID: 284345790665501792
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      shield 1_0: -4219667615955243262
+      artifactlogo_0: 284345790665501792
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
